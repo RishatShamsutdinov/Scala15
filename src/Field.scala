@@ -8,7 +8,9 @@ import scala.collection.mutable.ArrayBuffer
  * Time: 19:43
  * To change this template use File | Settings | File Templates.
  */
-class Field(private val squadSize: Int = 4) {
+class Field {
+
+    private val squadSize: Int = 4
 
     if (squadSize < 2) {
         throw new IllegalArgumentException("Illegal size of squad")
