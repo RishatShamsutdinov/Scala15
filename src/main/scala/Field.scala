@@ -99,7 +99,7 @@ class Field {
     }
 
     override def toString: String = {
-        val sb: StringBuilder = new StringBuilder
+        val sb = new StringBuilder
 
         nums.zipWithIndex foreach { case(n, idx) =>
             if (idx > 0 && idx % squadSize == 0) {
