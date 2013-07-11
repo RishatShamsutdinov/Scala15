@@ -15,13 +15,13 @@ object Program extends App {
     var cmd = ""
 
     while(!cmd.equalsIgnoreCase(exitCmd)) {
+        println(field)
+        println()
+
         if (field.isSorted) {
             println("Win!")
             break
         }
-
-        println(field)
-        println()
 
         print("Number (or '%s' to exit): " format exitCmd)
         cmd = readLine()

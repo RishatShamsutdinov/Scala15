@@ -39,11 +39,11 @@ class Field {
     private def isSolvable(nums: Array[Int]): Boolean = {
         val e: Int = getPositionLine(getFreePosition(nums)) + 1
 
-        ((nums.zipWithIndex map { case(x, idx) =>
-            nums drop(idx + 1) count { y =>
+        ((nums.zipWithIndex foldLeft 0) { case(acc, (x, idx)) =>
+            acc + (nums segmentLength(from = idx + 1, p = { y =>
                 y != 0 && y < x
-            }
-        }).sum + e) % 2 == 0
+            }))
+        } + e) % 2 == 0
     }
 
     private def getPositionLine(pos: Int): Int = pos / squadSize
@@ -63,8 +63,7 @@ class Field {
         freePosition = idx
     }
 
-
-    def getAndValidateMovingNumIdx(num: Int): Int = {
+    private def getAndValidateMovingNumIdx(num: Int): Int = {
         val idx: Int = nums indexOf num
 
         if (idx < 0) {
@@ -82,26 +81,20 @@ class Field {
         idx
     }
 
-    private def removeFreeNumIfNeed(buf: ArrayBuffer[Int]) {
+    private def removeFreeNumIfNeed(buf: ArrayBuffer[Int]): ArrayBuffer[Int] = {
         for (pos <- Array(buf.length - 1, 0)) {
             if (buf(pos) == 0) {
                 buf.remove(pos)
             }
         }
+
+        buf
     }
 
-    def isSorted: Boolean = {
-        val numsToCheck: ArrayBuffer[Int] = ArrayBuffer(nums: _*)
+    private def getNumsToCheck: ArrayBuffer[Int] = removeFreeNumIfNeed(ArrayBuffer(nums: _*))
 
-        removeFreeNumIfNeed(numsToCheck)
-
-        var result = true
-
-        numsToCheck sliding 2 foreach { x =>
-            result &= x(0) < x(1)
-        }
-
-        result
+    def isSorted: Boolean = getNumsToCheck sliding 2 forall { x =>
+        x(0) < x(1)
     }
 
     override def toString: String = {
