@@ -82,10 +82,8 @@ class Field {
     }
 
     private def removeFreeNumIfNeed(buf: ArrayBuffer[Int]): ArrayBuffer[Int] = {
-        for (pos <- Array(buf.length - 1, 0)) {
-            if (buf(pos) == 0) {
-                buf.remove(pos)
-            }
+        if (buf.last == 0) {
+            buf.remove(buf.length - 1)
         }
 
         buf
@@ -94,7 +92,10 @@ class Field {
     private def getNumsToCheck: ArrayBuffer[Int] = removeFreeNumIfNeed(ArrayBuffer(nums: _*))
 
     def isSorted: Boolean = getNumsToCheck sliding 2 forall { x =>
-        x(0) < x(1)
+        x(0) match {
+            case 0 => false
+            case x0: Int => x0 < x(1)
+        }
     }
 
     override def toString: String = {
